@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="game">
+	
+	<select id="getPointInfo"
+			parameterType="com.ksinformation.login.MemberDTO"
+			resultType="com.ksinformation.numbergame.GameDTO">
+			
+			SELECT
+				member_id AS memberId,
+				point,
+				game_count AS gameCount,
+				hide_num AS hideNum,
+				game_act_flg AS gameActFlg,
+				rec_create_date as recCreateDate,
+				rec_update_date as recUpdateDate
+				
+			FROM POINTINFO
+			WHERE member_id = #{memberId}
+			
+	</select>
+	
+	<select id="getGameResult"
+			parameterType="com.ksinformation.login.MemberDTO"
+			resultType="com.ksinformation.numbergame.ResultDTO">
+		SELECT
+			member_id as memberId,
+			game_count as gameCount,
+			input_num as inputNum,
+			result,
+			game_date as gameDate
+		FROM RESULTINFO
+		WHERE member_id = #{memberId}
+		AND game_date = CURRENT_DATE
+		ORDER BY game_count ASC
+	</select>
+	
+	<update id="setHideNum" parameterType="com.ksinformation.numbergame.GameDTO">
+		UPDATE POINTINFO
+		SET
+			hide_num = #{hideNum}
+		WHERE member_id = #{memberId}
+	</update>
+	
+	<update id="setPointInfo" parameterType="com.ksinformation.numbergame.GameDTO">
+		UPDATE POINTINFO
+		SET
+			point = #{point},
+			game_count = #{gameCount},
+			game_act_flg = #{gameActFlg}
+		WHERE member_id = #{memberId}
+	</update>
+	
+	<insert id="setGameResult" parameterType="com.ksinformation.numbergame.ResultDTO">
+		INSERT INTO RESULTINFO(member_id,game_count,input_num,result,game_date)
+		VALUES(#{memberId},#{gameCount},#{inputNum},#{result},CURRENT_DATE)
+	</insert>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
